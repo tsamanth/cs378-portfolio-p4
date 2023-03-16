@@ -5,7 +5,7 @@ import {TextField} from '@mui/material';
 import {Table} from '@mui/material';
 import {TableRow} from '@mui/material';
 import {Link} from 'react-router-dom';
-import Login from './Login'
+
 
 const cityList = [
   "Austin",
@@ -13,7 +13,7 @@ const cityList = [
   "Houston"
 ]
 
-const Weather = () => {
+export default function Weather() {
 
   const [info, setInfo] = useState([]);
   const [cities, setCities] = useState(cityList);
@@ -156,4 +156,3 @@ const Weather = () => {
   );
 }
 
-export default Weather;
