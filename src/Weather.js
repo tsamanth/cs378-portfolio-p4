@@ -4,6 +4,8 @@ import {Grid} from '@mui/material';
 import {TextField} from '@mui/material';
 import {Table} from '@mui/material';
 import {TableRow} from '@mui/material';
+import {Link} from 'react-router-dom';
+import Login from './Login'
 
 const cityList = [
   "Austin",
@@ -11,7 +13,7 @@ const cityList = [
   "Houston"
 ]
 
-export default function Weather () {
+const Weather = () => {
 
   const [info, setInfo] = useState([]);
   const [cities, setCities] = useState(cityList);
@@ -143,10 +145,15 @@ export default function Weather () {
             </Table>
           </Grid>
           <Grid sx = {{p: 2}}>
-            <Button variant = "outlined">Logout</Button>
+            <Button variant = "outlined">
+                <Link to = '/' style = {{textDecoration: 'none'}}>
+                    Logout
+                </Link>
+            </Button>
           </Grid>
         </Grid>
     </div>    
   );
 }
 
+export default Weather;

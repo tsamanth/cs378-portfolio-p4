@@ -1,7 +1,10 @@
 import React from 'react';
 import {TextField, Grid, Button} from '@mui/material';
+import { Link } from "react-router-dom";
 
-export default function Login() {
+
+const Login = () => {
+
     return (
         <div>
             <Grid
@@ -19,10 +22,15 @@ export default function Login() {
                     <TextField id = "standard-basic" label = {'password'} size = "small"/>
                 </Grid>
                 <Grid item xs = {12}>
-                    <Button style = {{width: 40, height: 40}} size = "small" variant = "outlined">Login</Button>
+                    <Button style = {{width: 40, height: 40}} size = "small" variant = "outlined">
+                        <Link to = '/weather' style = {{textDecoration: 'none'}} >
+                            Login
+                        </Link>
+                    </Button>
                 </Grid>
             </Grid>
         </div>
     )
 }
 
+export default Login;
