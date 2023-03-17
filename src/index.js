@@ -12,7 +12,7 @@ export function App() {
       <Router>
           <Routes>
             <Route exact path="/" element={<Login userName = {userName} setUserName = {setUserName}/>} />
-            <Route path="/weather" element={<Weather userName = {userName} setUserName = {setUserName}/>} />
+            <Route exact path="/weather" element={<Weather userName = {userName} setUserName = {setUserName}/>} />
           </Routes>
       </Router>
     )
