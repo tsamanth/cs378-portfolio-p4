@@ -1,10 +1,19 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {TextField, Grid, Button} from '@mui/material';
-import { Link } from "react-router-dom";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { firestore } from './firebase';
-export default function Login() {
+import {useNavigate } from "react-router-dom";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+// import {createUserWithEmailAndPassword} from "firebase/auth";
 
+
+export default function Login({userName, setUserName}) {
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (userName !==  "Guest") {
+            navigate('/weather');
+        }
+    })
     
     const usernameRef = useRef();
     const passwordRef = useRef();
@@ -14,7 +23,9 @@ export default function Login() {
         const auth = getAuth();
         signInWithEmailAndPassword(auth, usernameRef.current.value, passwordRef.current.value).then((userCredential) => {
             // Signed in 
-            const user = userCredential.user;
+            // const user = userCredential.user;
+            setUserName(usernameRef.current.value);
+            navigate('/weather');
             // ...
         }).catch((error) => {
             alert("The email or password is incorrect. Try again.");
@@ -27,6 +38,7 @@ export default function Login() {
     //     createUserWithEmailAndPassword(auth, usernameRef.current.value, passwordRef.current.value).then((userCredential) => {
     //         // Signed in 
     //         const user = userCredential.user;
+    //         navigate('/weather');
     //         // ...
     //     }).catch((error) => {
     //         const errorCode = error.code;

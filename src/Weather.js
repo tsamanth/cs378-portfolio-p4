@@ -5,19 +5,41 @@ import {TextField} from '@mui/material';
 import {Table} from '@mui/material';
 import {TableRow} from '@mui/material';
 import {Link} from 'react-router-dom';
+import {ref, set, onValue} from '@firebase/database';
+import { db } from './firebase';
 
-
-const cityList = [
+let cityList = [
   "Austin",
   "Dallas",
   "Houston"
 ]
 
-export default function Weather() {
+function writeUserData(username, cities) {
+  const reference = ref(db, username.substring(0, username.indexOf('@')) || "Guest");
+  set(reference, {
+    username:username,
+    cities:cities
+  });
+}
+
+export default function Weather({userName, setUserName}) {
 
   const [info, setInfo] = useState([]);
   const [cities, setCities] = useState(cityList);
   const [cityName, setCityName] = useState("Austin");
+
+  useEffect(() => {
+    if (userName !== "Guest") {
+      let user = userName.substring(0, userName.indexOf('@'));
+      let citiesRef = ref(db, user + '/cities');
+      onValue(citiesRef, (snapshot) => {
+        const data = snapshot.val();
+        cityList = data;
+        setCities(cityList);
+      })
+    }
+  // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     GenerateInfo("Austin");
@@ -51,13 +73,18 @@ export default function Weather() {
           if (cities.includes(city) === false)  {
             cityList.push(city);
             setCities(cityList);
+            writeUserData(userName, cityList);
           }
         });
       }
     })
   }
 
-  const ref = useRef(null);
+  const city = useRef(null);
+
+  if (cityList.size > 3) {
+    setCities(cityList);
+  }
 
   if (info.length === 0) {
     return <p>Loading...</p>;
@@ -73,17 +100,15 @@ export default function Weather() {
           justifyContent="center"
           direction= "column"
         >
-          <Grid sx = {{p: 2}}>
-            Hello, You
-          </Grid>
+          <Grid sx = {{p: 2}}>{userName}</Grid>
           <Grid sx = {{p: 1}}>
             {cities.map(city => (
               <Button onClick = { () => GenerateInfo(String(city))} variant = "outlined">{city}</Button>
             ))}
           </Grid>
           <Grid sx = {{p: 1}}>
-            <TextField inputRef = {ref} id = "standard-basic" label = {'search for city'} size = "small"/>
-            <Button onClick = { () => GenerateInfo(ref.current.value)} style = {{width: 40, height: 40}} size = "small" variant = "outlined">+</Button>
+            <TextField inputRef = {city} id = "standard-basic" label = {'search for city'} size = "small"/>
+            <Button onClick = { () => GenerateInfo(city.current.value)} style = {{width: 40, height: 40}} size = "small" variant = "outlined">+</Button>
           </Grid>
           <Grid sx = {{p: 1}}>
             {cityName.toUpperCase()}
@@ -145,7 +170,7 @@ export default function Weather() {
             </Table>
           </Grid>
           <Grid sx = {{p: 2}}>
-            <Button variant = "outlined">
+            <Button variant = "outlined" onClick ={() => {setUserName("Guest")}}>
                 <Link to = '/' style = {{textDecoration: 'none'}}>
                     Logout
                 </Link>
