@@ -9,7 +9,7 @@ import Login from './Login'
 export function App() {
     const [userName, setUserName] = useState("Guest");
     return (
-      <Router>
+      <Router basename={process.env.PUBLIC_URL}>
           <Routes>
             <Route exact path="/" element={<Login userName = {userName} setUserName = {setUserName}/>} />
             <Route exact path="/weather" element={<Weather userName = {userName} setUserName = {setUserName}/>} />
